@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatDistanceToNow } from 'date-fns';
 import { useBookmarkStore, type Bookmark } from './store/store';
 import { extractDomain } from './helpers/urlHelpers';
 import { DeleteButton } from './icons/DeleteButton';
@@ -32,7 +33,13 @@ export const BookmarkItem = ({ bookmark }: BookmarkItemProps) => {
             />
             <div className="ml-2 grow" onClick={handleNavigate}>
                 <div className="font-bold text-base">{bookmark.title}</div>
-                <div className="text-sm">{extractDomain(bookmark.url)}</div>
+                <div className="text-sm text-gray-600 flex gap-2">
+                    <div>{extractDomain(bookmark.url)}</div>
+                    <div>•</div>
+                    <div>
+                        {formatDistanceToNow(new Date(bookmark.savedAt), { addSuffix: true })}
+                    </div>
+                </div>
             </div>
             <DeleteButton onClick={handleDelete} className="ml-2" />
         </li>

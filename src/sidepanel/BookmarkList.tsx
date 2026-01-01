@@ -3,7 +3,8 @@ import { useBookmarkStore } from './store/store';
 import { BookmarkItem } from './BookmarkItem';
 
 export const BookmarkList = () => {
-    const { bookmarks } = useBookmarkStore();
+    const { getFilteredBookmarks } = useBookmarkStore();
+    const bookmarks = getFilteredBookmarks();
 
     if (bookmarks.length === 0) {
         return <div>No bookmarks available.</div>;

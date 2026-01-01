@@ -16,6 +16,7 @@
     "dependencies": {
         "@types/chrome": "^0.1.32",
         "chrome-types": "^0.1.403",
+        "date-fns": "^4.1.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "tailwindcss": "^4.1.18",

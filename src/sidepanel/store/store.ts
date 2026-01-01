@@ -7,7 +7,6 @@ export type Bookmark = {
     description?: string;
     favIconUrl?: string;
     savedAt: string;
-    tags?: string[];
 };
 
 interface StorageData {
@@ -32,6 +31,7 @@ interface BookmarkActions {
     removeBookmark: (id: string) => Promise<void>;
     setSortBy: (sortBy: SortBy) => void;
     setSortOrder: (order: SortOrder) => void;
+    toggleSortOrder: () => void;
     setFilterText: (text: string) => void;
 
     // Computed
@@ -105,6 +105,10 @@ export const useBookmarkStore = create<BookmarkStore>((set, get) => ({
 
     setSortBy: (sortBy) => set({ sortBy }),
     setSortOrder: (order) => set({ sortOrder: order }),
+    toggleSortOrder: () => {
+        const { sortOrder } = get();
+        set({ sortOrder: sortOrder === 'asc' ? 'desc' : 'asc' });
+    },
     setFilterText: (text) => set({ filterText: text }),
 
     getFilteredBookmarks: () => {
