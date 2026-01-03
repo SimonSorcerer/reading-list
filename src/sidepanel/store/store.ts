@@ -37,7 +37,7 @@ interface BookmarkActions {
 
     // Computed
     getFilteredBookmarks: () => Bookmark[];
-    isBookmarkSaved: (url: string) => boolean;
+    isBookmarkSaved: (url: string | undefined) => boolean;
 }
 
 type BookmarkStore = BookmarkState & BookmarkActions;
@@ -120,10 +120,7 @@ export const useBookmarkStore = create<BookmarkStore>((set, get) => ({
         if (filterText) {
             const lower = filterText.toLowerCase();
             filtered = filtered.filter(
-                (b) =>
-                    b.title.toLowerCase().includes(lower) ||
-                    b.url.toLowerCase().includes(lower) ||
-                    b.description?.toLowerCase().includes(lower)
+                (b) => b.title.toLowerCase().includes(lower) || b.url.toLowerCase().includes(lower)
             );
         }
 
@@ -140,7 +137,7 @@ export const useBookmarkStore = create<BookmarkStore>((set, get) => ({
         return filtered;
     },
 
-    isBookmarkSaved: (url) => {
-        return get().bookmarks.some((b) => b.url === url);
+    isBookmarkSaved: (url: string | undefined) => {
+        return url ? get().bookmarks.some((b) => b.url === url) : false;
     },
 }));

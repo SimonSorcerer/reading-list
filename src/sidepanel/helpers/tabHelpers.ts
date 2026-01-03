@@ -1,14 +1,9 @@
-import { type Bookmark } from '../store/store';
+export const getCurrentTab = async (): Promise<chrome.tabs.Tab | null> => {
+    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    return tabs[0] || null;
+};
 
-export const getCurrentBookmark = async (): Promise<Bookmark> => {
-    const currentTab = (await chrome.tabs.query({ active: true, currentWindow: true }))?.[0];
-
-    return {
-        id: currentTab.id?.toString() || '',
-        title: currentTab.title || '',
-        url: currentTab.url || '',
-        description: '',
-        favIconUrl: currentTab.favIconUrl || '',
-        savedAt: new Date().toISOString(),
-    };
+export const getTabById = async (tabId: number): Promise<chrome.tabs.Tab | null> => {
+    const tab = await chrome.tabs.get(tabId);
+    return tab || null;
 };

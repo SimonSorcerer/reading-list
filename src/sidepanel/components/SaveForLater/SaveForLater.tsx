@@ -1,21 +1,26 @@
 import { useBookmarkStore } from '../../store/store';
-import { getCurrentBookmark } from '../../helpers/tabHelpers';
+import { useTabInfo } from './useTabInfo';
 
 export const SaveForLater = () => {
-    const { addBookmark, isLoading } = useBookmarkStore();
-    const label = isLoading ? 'Saving ...' : 'Save For Later';
+    const { addBookmark } = useBookmarkStore();
+    const { currentBookmark, isBookmarkSaved } = useTabInfo();
+    const label = isBookmarkSaved ? 'Bookmark already saved' : 'Save For Later';
 
     const handleClick = async () => {
-        const newBookmark = await getCurrentBookmark();
-        await addBookmark(newBookmark);
+        console.log('Current Bookmark:', currentBookmark, 'Is Saved:', isBookmarkSaved);
+        if (!currentBookmark || isBookmarkSaved) {
+            return;
+        }
+        await addBookmark(currentBookmark);
     };
 
     return (
         <div>
             <button
-                className="border rounded-sm px-2 py-1 border-x-gray-400 font-bold cursor-pointer hover:bg-gray-200"
+                className="border rounded-sm px-4 py-2 my-4 text-md border-x-gray-400 font-bold cursor-pointer hover:bg-gray-200 disabled:text-gray-400"
                 type="button"
                 onClick={handleClick}
+                disabled={isBookmarkSaved}
             >
                 {label}
             </button>
