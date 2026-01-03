@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface DeleteButtonProps {
     onClick: () => void;
     className?: string;

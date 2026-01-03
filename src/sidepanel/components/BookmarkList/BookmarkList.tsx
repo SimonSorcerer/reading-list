@@ -1,13 +1,13 @@
-import React from 'react';
-import { useBookmarkStore } from './store/store';
+import { useBookmarkStore } from '../../store/store';
 import { BookmarkItem } from './BookmarkItem';
+import { EmptyList } from './EmptyList';
 
 export const BookmarkList = () => {
     const { getFilteredBookmarks } = useBookmarkStore();
     const bookmarks = getFilteredBookmarks();
 
     if (bookmarks.length === 0) {
-        return <div>No bookmarks available.</div>;
+        return <EmptyList />;
     }
 
     return (

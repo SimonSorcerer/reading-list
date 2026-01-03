@@ -1,7 +1,6 @@
-import React from 'react';
-import { SaveForLater } from './SaveForLater';
-import { BookmarkList } from './BookmarkList';
-import { BookmarkFilters } from './BookmarkFilters';
+import { SaveForLater } from './SaveForLater/SaveForLater';
+import { BookmarkList } from './BookmarkList/BookmarkList';
+import { BookmarkFilters } from './BookmarkFilters/BookmarkFilters';
 
 export const Sidepanel = () => {
     return (

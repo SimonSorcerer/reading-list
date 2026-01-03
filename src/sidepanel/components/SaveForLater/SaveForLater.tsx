@@ -1,6 +1,5 @@
-import React from 'react';
-import { useBookmarkStore } from './store/store';
-import { getCurrentBookmark } from './helpers/tabHelpers';
+import { useBookmarkStore } from '../../store/store';
+import { getCurrentBookmark } from '../../helpers/tabHelpers';
 
 export const SaveForLater = () => {
     const { addBookmark, isLoading } = useBookmarkStore();

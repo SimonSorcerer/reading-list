@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { config } from './config';
 
 export type Bookmark = {
     id: string;
@@ -56,7 +57,7 @@ export const useBookmarkStore = create<BookmarkStore>((set, get) => ({
     loadBookmarks: async () => {
         set({ isLoading: true });
         try {
-            const data = await chrome.storage.local.get<StorageData>(['bookmarks']);
+            const data = await config.chromeStorage.get<StorageData>(['bookmarks']);
 
             set({ bookmarks: data.bookmarks || [], isLoading: false, error: null });
         } catch (error) {
@@ -68,7 +69,7 @@ export const useBookmarkStore = create<BookmarkStore>((set, get) => ({
     addBookmark: async (bookmark) => {
         const { bookmarks } = get();
 
-        // Check if already exists
+        // Check if bookmark is already saved
         if (bookmarks.find((b) => b.url === bookmark.url)) {
             return false;
         }
@@ -81,8 +82,8 @@ export const useBookmarkStore = create<BookmarkStore>((set, get) => ({
         const updatedBookmarks = [...bookmarks, newBookmark];
 
         try {
-            await chrome.storage.local.set({ bookmarks: updatedBookmarks });
-            set({ bookmarks: updatedBookmarks, error: null });
+            await config.chromeStorage.set({ bookmarks: updatedBookmarks });
+            set({ bookmarks: updatedBookmarks, filterText: '', error: null });
             return true;
         } catch (error) {
             console.error('Failed to save bookmark:', error);
@@ -96,7 +97,7 @@ export const useBookmarkStore = create<BookmarkStore>((set, get) => ({
         const updatedBookmarks = bookmarks.filter((b) => b.id !== id);
 
         try {
-            await chrome.storage.local.set({ bookmarks: updatedBookmarks });
+            await config.chromeStorage.set({ bookmarks: updatedBookmarks });
             set({ bookmarks: updatedBookmarks });
         } catch (error) {
             console.error('Failed to remove bookmark:', error);
