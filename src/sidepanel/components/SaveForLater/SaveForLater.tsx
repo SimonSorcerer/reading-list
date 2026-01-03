@@ -17,7 +17,7 @@ export const SaveForLater = () => {
     return (
         <div>
             <button
-                className="border rounded-sm px-4 py-2 my-4 text-md border-x-gray-400 font-bold cursor-pointer hover:bg-gray-200 disabled:text-gray-400"
+                className="w-full bg-sky-700 text-white rounded-md px-4 py-3 my-4 text-md font-bold cursor-pointer hover:bg-sky-800 disabled:bg-gray-300 disabled:text-gray-500 transition-colors"
                 type="button"
                 onClick={handleClick}
                 disabled={isBookmarkSaved}
