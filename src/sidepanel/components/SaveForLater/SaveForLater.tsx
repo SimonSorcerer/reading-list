@@ -1,5 +1,5 @@
 import { useBookmarkStore } from '../../store/store';
-import { useTabInfo } from './useTabInfo';
+import { useTabInfo } from './hooks/useTabInfo';
 
 export const SaveForLater = () => {
     const { addBookmark } = useBookmarkStore();
