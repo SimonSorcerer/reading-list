@@ -1,7 +1,8 @@
 const chromeStorageType = 'local';
 
 export const config = {
-    sidepanelWidth: 300,
+    maxDescriptionLength: 100,
+    useSmartSummary: true,
     chromeStorageType,
     chromeStorage: chrome.storage[chromeStorageType],
 };

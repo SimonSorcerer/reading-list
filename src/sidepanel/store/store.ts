@@ -1,3 +1,4 @@
+import { getPageSummary } from '@/sidepanel/helpers/summaryHelpers';
 import { create } from 'zustand';
 import { config } from './config';
 
@@ -28,7 +29,7 @@ interface BookmarkState {
 
 interface BookmarkActions {
     loadBookmarks: () => Promise<void>;
-    addBookmark: (bookmark: Omit<Bookmark, 'id'>) => Promise<boolean>;
+    addBookmark: (tab: chrome.tabs.Tab) => Promise<boolean>;
     removeBookmark: (id: string) => Promise<void>;
     setSortBy: (sortBy: SortBy) => void;
     setSortOrder: (order: SortOrder) => void;
@@ -66,28 +67,41 @@ export const useBookmarkStore = create<BookmarkStore>((set, get) => ({
         }
     },
 
-    addBookmark: async (bookmark) => {
+    addBookmark: async (tab) => {
         const { bookmarks } = get();
 
-        // Check if bookmark is already saved
-        if (bookmarks.find((b) => b.url === bookmark.url)) {
+        if (bookmarks.find((b) => b.url === tab.url)) {
             return false;
+        }
+        set({ isLoading: true });
+
+        let description = '';
+        if (tab.id) {
+            try {
+                description = (await getPageSummary(tab.id)) || '';
+            } catch {
+                // I guess description will be empty if we fail to get it
+            }
         }
 
         const newBookmark: Bookmark = {
-            ...bookmark,
             id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            title: tab.title || '',
+            url: tab.url || '',
+            description,
+            favIconUrl: tab.favIconUrl || '',
+            savedAt: new Date().toISOString(),
         };
 
         const updatedBookmarks = [...bookmarks, newBookmark];
 
         try {
             await config.chromeStorage.set({ bookmarks: updatedBookmarks });
-            set({ bookmarks: updatedBookmarks, filterText: '', error: null });
+            set({ bookmarks: updatedBookmarks, filterText: '', error: null, isLoading: false });
             return true;
         } catch (error) {
             console.error('Failed to save bookmark:', error);
-            set({ error: (error as Error).message });
+            set({ error: (error as Error).message, isLoading: false });
             return false;
         }
     },

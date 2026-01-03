@@ -3,15 +3,14 @@ import { useTabInfo } from './useTabInfo';
 
 export const SaveForLater = () => {
     const { addBookmark } = useBookmarkStore();
-    const { currentBookmark, isBookmarkSaved } = useTabInfo();
+    const { currentTab, isBookmarkSaved } = useTabInfo();
     const label = isBookmarkSaved ? 'Bookmark already saved' : 'Save For Later';
 
     const handleClick = async () => {
-        console.log('Current Bookmark:', currentBookmark, 'Is Saved:', isBookmarkSaved);
-        if (!currentBookmark || isBookmarkSaved) {
+        if (!currentTab || isBookmarkSaved) {
             return;
         }
-        await addBookmark(currentBookmark);
+        await addBookmark(currentTab);
     };
 
     return (

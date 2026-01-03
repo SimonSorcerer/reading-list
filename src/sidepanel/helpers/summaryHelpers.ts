@@ -1,16 +1,6 @@
 import { config } from '../store/config';
 
-export const getCurrentTab = async (): Promise<chrome.tabs.Tab | null> => {
-    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-    return tabs[0] || null;
-};
-
-export const getTabById = async (tabId: number): Promise<chrome.tabs.Tab | null> => {
-    const tab = await chrome.tabs.get(tabId);
-    return tab || null;
-};
-
-export const getPageSummary = async (tabId: number): Promise<string | undefined> => {
+const getSimplePageSummary = async (tabId: number): Promise<string | undefined> => {
     const results = await chrome.scripting.executeScript({
         target: { tabId },
         func: (maxLength: number) => {
@@ -33,36 +23,36 @@ export const getPageSummary = async (tabId: number): Promise<string | undefined>
     return results[0]?.result;
 };
 
-export const getSmartPageSummary = async (tabId: number): Promise<string | undefined> => {
+const getSmartPageSummary = async (tabId: number): Promise<string | undefined> => {
     const results = await chrome.scripting.executeScript({
         target: { tabId },
         func: (maxLength: number) => {
-            // 1. Try Open Graph description (best quality - written for sharing)
+            // First try Open Graph description
             const ogDesc = document
                 .querySelector('meta[property="og:description"]')
                 ?.getAttribute('content');
             if (ogDesc) return ogDesc.substring(0, maxLength);
 
-            // 2. Try Twitter description
+            // Then Twitter description
             const twitterDesc = document
                 .querySelector('meta[name="twitter:description"]')
                 ?.getAttribute('content');
             if (twitterDesc) return twitterDesc.substring(0, maxLength);
 
-            // 3. Try standard meta description
+            // Then standard meta description
             const metaDesc = document
                 .querySelector('meta[name="description"]')
                 ?.getAttribute('content');
             if (metaDesc) return metaDesc.substring(0, maxLength);
 
-            // 4. Try first paragraph in article/main content
+            // Then first paragraph in article/main content
             const article = document.querySelector('article, main, [role="main"]');
             const articleParagraph = article?.querySelector('p')?.innerText?.trim();
             if (articleParagraph && articleParagraph.length > 30) {
                 return articleParagraph.substring(0, maxLength);
             }
 
-            // 5. Fallback: first substantial paragraph anywhere
+            // Then fallback: first substantial paragraph anywhere
             const paragraphs = document.querySelectorAll('p');
             for (const p of paragraphs) {
                 const text = p.innerText?.trim();
@@ -71,7 +61,7 @@ export const getSmartPageSummary = async (tabId: number): Promise<string | undef
                 }
             }
 
-            // 6. Last resort: body text
+            // Body text last
             return (
                 document.body?.innerText?.replace(/\s+/g, ' ').trim().substring(0, maxLength) || ''
             );
@@ -80,4 +70,12 @@ export const getSmartPageSummary = async (tabId: number): Promise<string | undef
     });
 
     return results[0]?.result;
+};
+
+export const getPageSummary = async (tabId: number): Promise<string | undefined> => {
+    if (config.useSmartSummary) {
+        return getSmartPageSummary(tabId);
+    } else {
+        return getSimplePageSummary(tabId);
+    }
 };

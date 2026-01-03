@@ -1,5 +1,5 @@
 import { getCurrentTab, getTabById } from '@/sidepanel/helpers/tabHelpers';
-import { Bookmark, useBookmarkStore } from '@/sidepanel/store/store';
+import { useBookmarkStore } from '@/sidepanel/store/store';
 import { useEffect, useState } from 'react';
 
 export const useTabInfo = () => {
@@ -8,17 +8,12 @@ export const useTabInfo = () => {
     const [currentTab, setCurrentTab] = useState<chrome.tabs.Tab | null>(null);
 
     useEffect(() => {
-        getCurrentTab().then((tab) => {
-            setCurrentTab(tab);
-        });
+        getCurrentTab().then(setCurrentTab);
 
         const handleTabChange = (info: chrome.tabs.OnActivatedInfo) => {
-            getTabById(info.tabId).then((tab) => {
-                setCurrentTab(tab);
-            });
+            getTabById(info.tabId).then(setCurrentTab);
         };
 
-        // Listen for tab changes
         chrome.tabs.onActivated.addListener(handleTabChange);
 
         return () => {
@@ -26,19 +21,8 @@ export const useTabInfo = () => {
         };
     }, []);
 
-    const mapTabToBook = (tab: chrome.tabs.Tab): Bookmark => {
-        return {
-            id: tab.id?.toString() || '',
-            title: tab.title || '',
-            url: tab.url || '',
-            description: '',
-            favIconUrl: tab.favIconUrl || '',
-            savedAt: new Date().toISOString(),
-        };
-    };
-
     return {
-        currentBookmark: currentTab ? mapTabToBook(currentTab) : null,
+        currentTab,
         isBookmarkSaved: isBookmarkSaved(currentTab?.url),
     };
 };

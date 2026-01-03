@@ -3,7 +3,7 @@
     "name": "Reading List",
     "version": "1.0.0",
     "description": "Save web pages for later reading with automatic metadata capture",
-    "permissions": ["storage", "activeTab", "sidePanel", "tabs"],
+    "permissions": ["storage", "activeTab", "sidePanel", "tabs", "scripting"],
     "host_permissions": ["<all_urls>"],
     "content_security_policy": {
         "extension_pages": "script-src 'self'; object-src 'self'"
@@ -12,9 +12,18 @@
         "service_worker": "background.bundle.js",
         "type": "module"
     },
+    "icons": {
+        "16": "icons/leaf-16.png",
+        "32": "icons/leaf-32.png",
+        "48": "icons/leaf-48.png"
+    },
     "action": {
         "default_title": "Open Reading List",
-        "default_icon": "icons/hi_icon.png"
+        "default_icon": {
+            "16": "icons/leaf-16.png",
+            "32": "icons/leaf-32.png",
+            "48": "icons/leaf-48.png"
+        }
     },
     "side_panel": {
         "default_path": "sidepanel.html"

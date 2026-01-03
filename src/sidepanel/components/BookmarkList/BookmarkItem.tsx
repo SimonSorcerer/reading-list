@@ -34,7 +34,8 @@ export const BookmarkItem = ({ bookmark }: BookmarkItemProps) => {
             </div>
             <div className="ml-2 grow" onClick={handleNavigate}>
                 <div className="font-bold text-base">{bookmark.title}</div>
-                <div className="text-sm text-gray-600 flex gap-2">
+                <div className="text-xs text-gray-500">{bookmark.description}</div>
+                <div className="text-sm text-gray-700 flex gap-2">
                     <div>{extractDomain(bookmark.url)}</div>
                     <div>•</div>
                     <div>
