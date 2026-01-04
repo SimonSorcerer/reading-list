@@ -1,8 +1,20 @@
 const chromeStorageType = 'local';
 
+// Set to true to easily test error handling
+const SIMULATE_ERRORS = false;
+
+const mockFailingStorage = {
+    get: async () => {
+        throw new Error('Simulated storage read error');
+    },
+    set: async () => {
+        throw new Error('Simulated storage write error');
+    },
+};
+
 export const config = {
     maxDescriptionLength: 100,
     useSmartSummary: true,
     chromeStorageType,
-    chromeStorage: chrome.storage[chromeStorageType],
+    chromeStorage: SIMULATE_ERRORS ? mockFailingStorage : chrome.storage[chromeStorageType],
 };

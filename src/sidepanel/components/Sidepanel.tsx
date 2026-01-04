@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useBookmarkStore } from '../store/store';
 import { BookmarkFilters } from './BookmarkFilters/BookmarkFilters';
 import { BookmarkList } from './BookmarkList/BookmarkList';
+import { ErrorNotification } from './ErrorNotification/ErrorNotification';
 import { SaveForLater } from './SaveForLater/SaveForLater';
 
 export const Sidepanel = () => {
@@ -13,6 +14,7 @@ export const Sidepanel = () => {
 
     return (
         <div className="p-4">
+            <ErrorNotification />
             <SaveForLater />
             <BookmarkFilters />
             <hr />

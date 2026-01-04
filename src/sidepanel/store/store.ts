@@ -24,14 +24,13 @@ export const useBookmarkStore = create<BookmarkStore>((set, get) => ({
     ...INITIAL_STATE,
 
     loadBookmarks: async () => {
-        set({ isLoading: true });
+        set({ isLoading: true, error: null });
         try {
             const data = await config.chromeStorage.get<StorageData>(['bookmarks']);
 
             set({ bookmarks: data.bookmarks || [], isLoading: false, error: null });
         } catch (error) {
-            console.error('Failed to load bookmarks:', error);
-            set({ isLoading: false, error: (error as Error).message });
+            set({ isLoading: false, error: 'Failed to load bookmarks. Please try again.' });
         }
     },
 
@@ -45,7 +44,7 @@ export const useBookmarkStore = create<BookmarkStore>((set, get) => ({
         if (bookmarks.find((b) => b.url === tab.url)) {
             return false;
         }
-        set({ isLoading: true });
+        set({ isLoading: true, error: null });
 
         let description = '';
         if (tab.id) {
@@ -73,21 +72,22 @@ export const useBookmarkStore = create<BookmarkStore>((set, get) => ({
             set({ bookmarks: updatedBookmarks, filterText: '', error: null, isLoading: false });
             return true;
         } catch (error) {
-            console.error('Failed to save bookmark:', error);
-            set({ error: (error as Error).message, isLoading: false });
+            set({ error: 'Failed to save bookmark. Please try again.', isLoading: false });
             return false;
         }
     },
 
     removeBookmark: async (id) => {
         const { bookmarks } = get();
+        set({ isLoading: true, error: null });
         const updatedBookmarks = bookmarks.filter((b) => b.id !== id);
 
         try {
             await config.chromeStorage.set({ bookmarks: updatedBookmarks });
-            set({ bookmarks: updatedBookmarks });
+            set({ bookmarks: updatedBookmarks, isLoading: false });
         } catch (error) {
             console.error('Failed to remove bookmark:', error);
+            set({ error: 'Failed to remove bookmark. Please try again.', isLoading: false });
         }
     },
 
@@ -98,6 +98,7 @@ export const useBookmarkStore = create<BookmarkStore>((set, get) => ({
         set({ sortOrder: sortOrder === 'asc' ? 'desc' : 'asc' });
     },
     setFilterText: (text) => set({ filterText: text }),
+    clearError: () => set({ error: null }),
 
     getFilteredBookmarks: () => {
         const { bookmarks, sortBy, sortOrder, filterText } = get();

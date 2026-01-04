@@ -27,6 +27,7 @@ export interface BookmarkActions {
     setSortOrder: (order: SortOrder) => void;
     toggleSortOrder: () => void;
     setFilterText: (text: string) => void;
+    clearError: () => void;
 
     // Computed
     getFilteredBookmarks: () => Bookmark[];
