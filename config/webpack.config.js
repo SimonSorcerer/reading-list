@@ -10,7 +10,6 @@ module.exports = (env, argv) => {
         entry: {
             background: './src/background/index.ts',
             sidepanel: './src/sidepanel/index.tsx',
-            content: './src/content/index.ts',
         },
         output: {
             path: path.resolve(__dirname, '../dist'),
@@ -48,7 +47,6 @@ module.exports = (env, argv) => {
                 '@shared': path.resolve(__dirname, '../src/shared'),
                 '@background': path.resolve(__dirname, '../src/background'),
                 '@sidepanel': path.resolve(__dirname, '../src/sidepanel'),
-                '@content': path.resolve(__dirname, '../src/content'),
             },
         },
         plugins: [

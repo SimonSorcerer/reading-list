@@ -1,47 +1,14 @@
 import { getPageSummary } from '@/sidepanel/helpers/summaryHelpers';
 import { create } from 'zustand';
 import { config } from './config';
+import { Bookmark, BookmarkState, BookmarkStore } from './types';
 
-export type Bookmark = {
-    id: string;
-    title: string;
-    url: string;
-    description?: string;
-    favIconUrl?: string;
-    savedAt: string;
-};
+export type { Bookmark, BookmarkState, BookmarkStore } from './types';
+export type { SortBy, SortOrder } from './types';
 
 interface StorageData {
     bookmarks: Bookmark[];
 }
-
-type SortBy = 'savedAt' | 'title';
-type SortOrder = 'asc' | 'desc';
-
-interface BookmarkState {
-    bookmarks: Bookmark[];
-    sortBy: SortBy;
-    sortOrder: SortOrder;
-    filterText: string;
-    isLoading: boolean;
-    error: string | null;
-}
-
-interface BookmarkActions {
-    loadBookmarks: () => Promise<void>;
-    addBookmark: (tab: chrome.tabs.Tab) => Promise<boolean>;
-    removeBookmark: (id: string) => Promise<void>;
-    setSortBy: (sortBy: SortBy) => void;
-    setSortOrder: (order: SortOrder) => void;
-    toggleSortOrder: () => void;
-    setFilterText: (text: string) => void;
-
-    // Computed
-    getFilteredBookmarks: () => Bookmark[];
-    isBookmarkSaved: (url: string | undefined) => boolean;
-}
-
-type BookmarkStore = BookmarkState & BookmarkActions;
 
 const INITIAL_STATE: BookmarkState = {
     bookmarks: [],
@@ -80,6 +47,7 @@ export const useBookmarkStore = create<BookmarkStore>((set, get) => ({
             try {
                 description = (await getPageSummary(tab.id)) || '';
             } catch {
+                description = '(No description available)';
                 // I guess description will be empty if we fail to get it
             }
         }
