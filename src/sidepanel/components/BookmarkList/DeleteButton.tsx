@@ -5,7 +5,7 @@ interface DeleteButtonProps {
 
 export const DeleteButton = ({ onClick, className }: DeleteButtonProps) => (
     <button
-        className={`cursor-pointer ${className}`}
+        className={`cursor-pointer hover:bg-gray-300 p-2 ${className}`}
         type="button"
         onClick={onClick}
         title="Delete"
