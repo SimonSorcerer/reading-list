@@ -22,7 +22,7 @@
             "@background/*": ["src/background/*"],
             "@sidepanel/*": ["src/sidepanel/*"]
         },
-        "types": ["chrome"]
+        "types": ["chrome", "jest", "node"]
     },
     "include": ["src/**/*"],
     "exclude": ["node_modules", "dist"]

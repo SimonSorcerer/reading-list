@@ -1,4 +1,5 @@
 import { getPageSummary } from '@/sidepanel/helpers/summaryHelpers';
+import { isUrlBookmarkable } from '@/sidepanel/helpers/urlHelpers';
 import { create } from 'zustand';
 import { config } from './config';
 import { Bookmark, BookmarkState, BookmarkStore } from './types';
@@ -36,6 +37,10 @@ export const useBookmarkStore = create<BookmarkStore>((set, get) => ({
 
     addBookmark: async (tab) => {
         const { bookmarks } = get();
+
+        if (!isUrlBookmarkable(tab.url)) {
+            return false;
+        }
 
         if (bookmarks.find((b) => b.url === tab.url)) {
             return false;

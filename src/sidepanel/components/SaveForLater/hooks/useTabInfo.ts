@@ -5,13 +5,13 @@ import { useEffect, useState } from 'react';
 export const useTabInfo = () => {
     const { isBookmarkSaved } = useBookmarkStore();
 
-    const [currentTab, setCurrentTab] = useState<chrome.tabs.Tab | null>(null);
+    const [currentTabUrl, setCurrentTabUrl] = useState<string | undefined>();
 
     useEffect(() => {
-        getCurrentTab().then(setCurrentTab);
+        getCurrentTab().then((tab) => setCurrentTabUrl(tab?.url));
 
         const handleTabChange = (info: chrome.tabs.OnActivatedInfo) => {
-            getTabById(info.tabId).then(setCurrentTab);
+            getTabById(info.tabId).then((tab) => setCurrentTabUrl(tab?.url));
         };
 
         const handleTabUpdate = (
@@ -20,12 +20,13 @@ export const useTabInfo = () => {
             tab: chrome.tabs.Tab
         ) => {
             if (changeInfo.url && tab.active) {
-                setCurrentTab(tab);
+                setCurrentTabUrl(changeInfo.url);
             }
         };
 
-        // To get up-to-date tab info, we listen to both activated and updated events
-        // to cover tab switches and URL changes (e.g., when navigating within the same tab)
+        // Listen to both activated and updated events to cover:
+        // - Tab switches (onActivated)
+        // - URL changes within the same tab (onUpdated)
         chrome.tabs.onActivated.addListener(handleTabChange);
         chrome.tabs.onUpdated.addListener(handleTabUpdate);
 
@@ -36,7 +37,7 @@ export const useTabInfo = () => {
     }, []);
 
     return {
-        currentTab,
-        isBookmarkSaved: isBookmarkSaved(currentTab?.url),
+        currentTabUrl,
+        isBookmarkSaved: isBookmarkSaved(currentTabUrl),
     };
 };
