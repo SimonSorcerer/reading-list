@@ -98,6 +98,16 @@ The project includes few unit tests just to demonstrate testing patterns for:
 - Async functions with Chrome API mocking (`tabHelpers.test.ts`)
   Snapshot tests for components can be added if needed as well.
 
+## Configuration
+
+App configuration is centralized in [`src/sidepanel/store/config.ts`](src/sidepanel/store/config.ts):
+
+| Option                 | Description                                                                   |
+| ---------------------- | ----------------------------------------------------------------------------- |
+| `maxDescriptionLength` | Max characters for page description (default: 100)                            |
+| `useSmartSummary`      | `true` = smarter extraction (OG tags, paragraphs), `false` = simple body text |
+| `SIMULATE_ERRORS`      | Set to `true` to test error handling UI                                       |
+
 ## Architecture Decisions
 
 ### On-Demand Script Injection vs Content Scripts
