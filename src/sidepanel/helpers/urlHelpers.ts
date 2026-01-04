@@ -1,4 +1,4 @@
-const DOMAIN_REGEX = /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n?]+)/;
+const DOMAIN_REGEX = /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:/\n?]+)/;
 const BOOKMARKABLE_URL_REGEX = /^https?:\/\//i;
 
 export const extractDomain = (url: string): string | null => {
