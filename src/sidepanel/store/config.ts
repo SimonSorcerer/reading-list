@@ -14,6 +14,7 @@ const mockFailingStorage = {
 
 export const config = {
     maxDescriptionLength: 100,
+    noDescriptionMessage: '(No description available)',
     useSmartSummary: true, // Use simple summary (as per requirements) or slightly better extraction (smarter)
     chromeStorageType,
     chromeStorage: SIMULATE_ERRORS ? mockFailingStorage : chrome.storage[chromeStorageType],

@@ -79,3 +79,14 @@ export const getPageSummary = async (tabId: number): Promise<string | undefined>
         return getSimplePageSummary(tabId);
     }
 };
+
+export const getBookmarkDescription = async (tabId: number | undefined): Promise<string> => {
+    if (!tabId) return config.noDescriptionMessage;
+
+    try {
+        const summary = await getPageSummary(tabId);
+        return summary ? `${summary}...` : config.noDescriptionMessage;
+    } catch {
+        return config.noDescriptionMessage;
+    }
+};

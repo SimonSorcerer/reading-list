@@ -1,4 +1,4 @@
-import { getPageSummary } from '@/sidepanel/helpers/summaryHelpers';
+import { getBookmarkDescription } from '@/sidepanel/helpers/summaryHelpers';
 import { isUrlBookmarkable } from '@/sidepanel/helpers/urlHelpers';
 import { create } from 'zustand';
 import { config } from './config';
@@ -44,17 +44,10 @@ export const useBookmarkStore = create<BookmarkStore>((set, get) => ({
         if (bookmarks.find((b) => b.url === tab.url)) {
             return false;
         }
+
         set({ isLoading: true, error: null });
 
-        let description = '';
-        if (tab.id) {
-            try {
-                description = (await getPageSummary(tab.id)) || '';
-            } catch {
-                description = '(No description available)';
-                // I guess description will be empty if we fail to get it
-            }
-        }
+        const description = await getBookmarkDescription(tab.id);
 
         const newBookmark: Bookmark = {
             id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -86,7 +79,6 @@ export const useBookmarkStore = create<BookmarkStore>((set, get) => ({
             await config.chromeStorage.set({ bookmarks: updatedBookmarks });
             set({ bookmarks: updatedBookmarks, isLoading: false });
         } catch (error) {
-            console.error('Failed to remove bookmark:', error);
             set({ error: 'Failed to remove bookmark. Please try again.', isLoading: false });
         }
     },
