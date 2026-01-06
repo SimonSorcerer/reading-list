@@ -1,9 +1,9 @@
 {
     "manifest_version": 3,
     "name": "Reading List",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Save web pages for later reading with automatic metadata capture",
-    "permissions": ["storage", "activeTab", "sidePanel", "tabs", "scripting"],
+    "permissions": ["storage", "activeTab", "sidePanel", "tabs", "scripting", "sessions"],
     "host_permissions": ["https://*/*", "http://*/*"],
     "content_security_policy": {
         "extension_pages": "script-src 'self'; object-src 'self'"
