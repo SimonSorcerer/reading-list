@@ -3,6 +3,7 @@ import { isUrlBookmarkable } from '@/sidepanel/helpers/urlHelpers';
 import { create } from 'zustand';
 import { config } from './config';
 import { Bookmark, BookmarkState, BookmarkStore } from './types';
+import { mapTabToBookmark } from '../helpers/tabHelpers';
 
 export type { Bookmark, BookmarkState, BookmarkStore } from './types';
 export type { SortBy, SortOrder } from './types';
@@ -48,17 +49,7 @@ export const useBookmarkStore = create<BookmarkStore>((set, get) => ({
         set({ isLoading: true, error: null });
 
         const description = await getBookmarkDescription(tab.id);
-
-        const newBookmark: Bookmark = {
-            id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-            title: tab.title || '',
-            url: tab.url || '',
-            description,
-            favIconUrl: tab.favIconUrl || '',
-            savedAt: new Date().toISOString(),
-        };
-
-        const updatedBookmarks = [...bookmarks, newBookmark];
+        const updatedBookmarks = [...bookmarks, mapTabToBookmark(tab, description)];
 
         try {
             await config.chromeStorage.set({ bookmarks: updatedBookmarks });
@@ -108,7 +99,9 @@ export const useBookmarkStore = create<BookmarkStore>((set, get) => ({
             const multiplier = sortOrder === 'asc' ? 1 : -1;
 
             if (sortBy === 'savedAt') {
-                return multiplier * (new Date(a.savedAt).getTime() - new Date(b.savedAt).getTime());
+                const aTime = a.savedAt ? new Date(a.savedAt).getTime() : 0;
+                const bTime = b.savedAt ? new Date(b.savedAt).getTime() : 0;
+                return multiplier * (aTime - bTime);
             }
 
             return multiplier * a.title.localeCompare(b.title);

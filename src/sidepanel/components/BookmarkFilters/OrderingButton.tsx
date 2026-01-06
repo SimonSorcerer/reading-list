@@ -29,7 +29,10 @@ export const OrderingButton = ({
     const isActiveClass = isActive ? 'text-gray-800' : 'text-gray-400';
 
     return (
-        <button onClick={handleClick} className={`font-bold hover:text-black  ${isActiveClass}`}>
+        <button
+            onClick={handleClick}
+            className={`font-bold hover:text-black text-nowrap ${isActiveClass}`}
+        >
             {label} {labelSuffix}
         </button>
     );

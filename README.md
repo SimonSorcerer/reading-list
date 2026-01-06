@@ -5,6 +5,7 @@ A Chrome Extension (Manifest V3) with a Side Panel Content that saves web pages
 ## Features
 
 - 📑 Save web pages with automatic metadata extraction
+- 🕐 Recently closed tabs list with real-time updates
 - 🎨 Side panel UI for easy bookmark management
 - 💾 Chrome Storage API for data persistence
 - ⚡ Built with TypeScript, React, and Webpack
@@ -104,6 +105,7 @@ App configuration is centralized in [`src/sidepanel/store/config.ts`](src/sidepa
 
 | Option                 | Description                                                                   |
 | ---------------------- | ----------------------------------------------------------------------------- |
+| `maxRecentTabs`        | Number of recently closed tabs to display (default: 3)                        |
 | `maxDescriptionLength` | Max characters for page description (default: 100)                            |
 | `useSmartSummary`      | `true` = smarter extraction (OG tags, paragraphs), `false` = simple body text |
 | `SIMULATE_ERRORS`      | Set to `true` to test error handling UI                                       |

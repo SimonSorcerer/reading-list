@@ -13,6 +13,7 @@ const mockFailingStorage = {
 };
 
 export const config = {
+    maxRecentTabs: 3,
     maxDescriptionLength: 100,
     noDescriptionMessage: '(No description available)',
     useSmartSummary: true, // Use simple summary (as per requirements) or slightly better extraction (smarter)

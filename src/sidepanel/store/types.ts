@@ -4,7 +4,7 @@ export type Bookmark = {
     url: string;
     description?: string;
     favIconUrl?: string;
-    savedAt: string;
+    savedAt?: string;
 };
 
 export type SortBy = 'savedAt' | 'title';

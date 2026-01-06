@@ -5,9 +5,10 @@ import { DeleteButton } from './DeleteButton';
 
 interface BookmarkItemProps {
     bookmark: Bookmark;
+    canBeDeleted?: boolean;
 }
 
-export const BookmarkItem = ({ bookmark }: BookmarkItemProps) => {
+export const BookmarkItem = ({ bookmark, canBeDeleted = true }: BookmarkItemProps) => {
     const { removeBookmark } = useBookmarkStore();
 
     const handleNavigate = async () => {
@@ -39,11 +40,12 @@ export const BookmarkItem = ({ bookmark }: BookmarkItemProps) => {
                     <div>{extractDomain(bookmark.url)}</div>
                     <div>•</div>
                     <div>
-                        {formatDistanceToNow(new Date(bookmark.savedAt), { addSuffix: true })}
+                        {bookmark.savedAt &&
+                            formatDistanceToNow(new Date(bookmark.savedAt), { addSuffix: true })}
                     </div>
                 </div>
             </div>
-            <DeleteButton onClick={handleDelete} className="ml-2" />
+            {canBeDeleted && <DeleteButton onClick={handleDelete} className="ml-2" />}
         </li>
     );
 };
