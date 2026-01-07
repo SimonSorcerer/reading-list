@@ -2,6 +2,10 @@
 
 A Chrome Extension (Manifest V3) with a Side Panel Content that saves web pages for later reading. The extension captures page metadata automatically and provides a simple interface to manage bookmarks.
 
+<div align="center">
+  <img src="docs/screenshotA.png" alt="Side Panel Screenshot" width="400"/>
+</div>
+
 ## Features
 
 - 📑 Save web pages with automatic metadata extraction
